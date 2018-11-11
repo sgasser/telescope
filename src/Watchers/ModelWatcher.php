@@ -32,7 +32,13 @@ class ModelWatcher extends Watcher
             return;
         }
 
-        $model = get_class($data[0]).':'.implode('_', (array) $data[0]->getKey());
+        if (is_object($data[0]->getKey()) AND $data[0]->getKey() instanceOf \Ramsey\Uuid\Uuid) {
+            $key = $data[0]->getKey()->toString();
+        } else {
+            $key = $data[0]->getKey();
+        }
+
+        $model = get_class($data[0]).':'.implode('_', (array) $key);
 
         $changes = $data[0]->getChanges();
 
